@@ -77,7 +77,7 @@ pub mod foo3 {
     impl<T> Foo3 for Impl<T>
     where
         T: DelegateFoo3<T>,
-        for<'i> <T::By as framework::BorrowImplRef<'i, T>>::Ref: Foo3 + framework::ImplRef<'i, T>,
+        for<'i> <T::By as framework::BorrowImplRef<'i, T>>::Ref: Foo3,
     {
         fn foo3(&self) -> i32 {
             <T::By as framework::BorrowImplRef<T>>::Ref::from_impl(self).foo3()
