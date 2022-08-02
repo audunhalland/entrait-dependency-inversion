@@ -6,8 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-core = { path = "core", version = "0.1.0" }
-middle = { path = "middle", version = "0.1.0" }
+framework = { path = "framework" }
+core = { path = "core" }
+middle = { path = "middle" }
 implementation = "0.1"
 
 [workspace]

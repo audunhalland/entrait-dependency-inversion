@@ -6,6 +6,14 @@ version = 3
 name = "core"
 version = "0.1.0"
 dependencies = [
+ "framework",
+ "implementation",
+]
+
+[[package]]
+name = "framework"
+version = "0.1.0"
+dependencies = [
  "implementation",
 ]
 
@@ -20,6 +28,7 @@ name = "middle"
 version = "0.1.0"
 dependencies = [
  "core",
+ "framework",
  "implementation",
 ]
 
@@ -28,6 +37,7 @@ name = "rust-dependency-inversion"
 version = "0.1.0"
 dependencies = [
  "core",
+ "framework",
  "implementation",
  "middle",
 ]

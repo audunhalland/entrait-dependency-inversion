@@ -1,47 +1,73 @@
+use framework::ImplRef;
+
 use implementation::Impl;
 
-pub trait Facade {
-    fn foo(&self) -> i32;
-}
+pub mod foo1 {
+    use super::*;
 
-pub trait FacadeImpl<T> {
-    fn foo(__self: &Impl<T>) -> i32;
-}
+    pub trait Foo1 {
+        fn foo1(&self) -> i32;
+    }
 
-pub trait FacadeSelectImpl<T> {
-    type Impl: FacadeImpl<T>;
-}
+    pub trait Foo1Impl<T> {
+        fn foo1(__self: &Impl<T>) -> i32;
+    }
 
-// Delegation
-impl<T> Facade for Impl<T> where T: FacadeSelectImpl<T> {
-    fn foo(&self) -> i32 {
-        <T as FacadeSelectImpl<T>>::Impl::foo(self)
+    pub trait Foo1SelectImpl<T> {
+        type Impl: Foo1Impl<T>;
+    }
+
+    // Delegation
+    impl<T> Foo1 for Impl<T>
+    where
+        T: Foo1SelectImpl<T>,
+    {
+        fn foo1(&self) -> i32 {
+            <T as Foo1SelectImpl<T>>::Impl::foo1(self)
+        }
     }
 }
 
-/// IMPL 2:
+pub mod foo2 {
+    use super::*;
 
-/// Library start
-pub trait ImplRef<'i, T> {
-    fn from_impl(_impl: &'i Impl<T>) -> Self;
+    pub trait Foo2 {
+        fn foo2(&self) -> i32;
+    }
 
-    fn as_impl(&self) -> &'i Impl<T>;
+    pub trait SelectFoo2<'i, T> {
+        type Ref: Foo2 + framework::ImplRef<'i, T>;
+    }
+
+    impl<T> Foo2 for Impl<T>
+    where
+        T: for<'i> SelectFoo2<'i, T>,
+    {
+        fn foo2(&self) -> i32 {
+            <T as SelectFoo2<T>>::Ref::from_impl(self).foo2()
+        }
+    }
 }
-pub trait Proxy<T> {
-    type Ref: for<'i> ImplRef<'i, T>;
-}
-/// Library end
 
-pub trait Foo2 {
-    fn foo2(&self) -> i32;
-}
+pub mod foo3 {
+    use super::*;
 
-pub trait SelectFoo2<'i, T> {
-    type Ref: Foo2 + ImplRef<'i, T>;
-}
+    /// Impl 3:
+    pub trait Foo3 {
+        fn foo3(&self) -> i32;
+    }
 
-impl<T> Foo2 for Impl<T> where T: for<'i> SelectFoo2<'i, T> {
-    fn foo2(&self) -> i32 {
-        <T as SelectFoo2<T>>::Ref::from_impl(self).foo2()
+    pub trait SelectFoo3<T> {
+        type By: framework::Proxy<T>;
+    }
+
+    impl<T> Foo3 for Impl<T>
+    where
+        T: SelectFoo3<T>,
+        <T::By as framework::Proxy<T>>::Ref: Foo3 + for<'i> framework::ImplRef<'i, T>,
+    {
+        fn foo3(&self) -> i32 {
+            <T::By as framework::Proxy<T>>::Ref::from_impl(self).foo3()
+        }
     }
 }
