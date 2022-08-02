@@ -21,3 +21,11 @@ Implementing static dispatch of a dependency inversion requires the `T` to imple
 
 Implementing dynamic dispatch will only require implementing a method that returns `dyn Trait`.
 But we need to generate a _copy_ of the trait, with an extra `&Impl<T>`-receiver, to use as delegation target.
+
+## 🧅 Architecture
+This project models a so-called "onion" architecture by using a crate graph.
+This ensures that coherence (a.k.a. Orphan) rules are not broken.
+
+The inner layer is inside `domain/`, and defines some traits which get delegated to an unknown receiver.
+The `intermediate/` layer is supposed to provide those delegated-to implementations.
+The main crate in `src/` defines the application and links things together.
