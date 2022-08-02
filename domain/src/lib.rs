@@ -122,8 +122,7 @@ pub mod foo_static_async {
         where
             Self: 's;
 
-        // TODO: elide
-        fn foo_static_async<'s>(&'s self) -> Self::Fut<'s>;
+        fn foo_static_async(&self) -> Self::Fut<'_>;
     }
 
     pub trait DelegateFooStaticAsync<T> {
@@ -135,9 +134,9 @@ pub mod foo_static_async {
         T: DelegateFooStaticAsync<T> + 'static,
         for<'i> <T::By as framework::BorrowImplRef<'i, T>>::Ref: FooStaticAsync,
     {
-        type Fut<'s> = impl Future<Output = i32> + 's;
+        type Fut<'s> = impl Future<Output = i32>;
 
-        fn foo_static_async<'s>(&'s self) -> Self::Fut<'s> {
+        fn foo_static_async(&self) -> Self::Fut<'_> {
             async move {
                 <T::By as framework::BorrowImplRef<T>>::Ref::from_impl(self)
                     .foo_static_async()

@@ -134,13 +134,11 @@ pub mod foo_static_async {
 
     impl<'i, T> FooStaticAsync for MyImplRef<'i, T>
     where
-        T: 'static,
         Impl<T>: SomeDep,
     {
-        type Fut<'s> = impl Future<Output = i32> + 's
-            where Self: 's;
+        type Fut<'s> = impl Future<Output = i32> where Self: 's;
 
-        fn foo_static_async<'s>(&'s self) -> Self::Fut<'s> {
+        fn foo_static_async(&self) -> Self::Fut<'_> {
             async move { self.as_impl().bar() }
         }
     }
