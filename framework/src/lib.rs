@@ -6,6 +6,8 @@ pub trait ImplRef<'i, T> {
     fn as_impl(&self) -> &'i Impl<T>;
 }
 
-pub trait Proxy<T> {
-    type Ref: for<'i> ImplRef<'i, T>;
+pub trait BorrowImplRef<'i, T> {
+    type Ref: ImplRef<'i, T>;
 }
+
+pub trait BorrowImpl<T>: for<'i> BorrowImplRef<'i, T> {}

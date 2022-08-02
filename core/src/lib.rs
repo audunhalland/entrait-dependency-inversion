@@ -52,22 +52,21 @@ pub mod foo2 {
 pub mod foo3 {
     use super::*;
 
-    /// Impl 3:
     pub trait Foo3 {
         fn foo3(&self) -> i32;
     }
 
     pub trait SelectFoo3<T> {
-        type By: framework::Proxy<T>;
+        type By: framework::BorrowImpl<T>;
     }
 
     impl<T> Foo3 for Impl<T>
     where
         T: SelectFoo3<T>,
-        <T::By as framework::Proxy<T>>::Ref: Foo3 + for<'i> framework::ImplRef<'i, T>,
+        for<'i> <T::By as framework::BorrowImplRef<'i, T>>::Ref: Foo3 + framework::ImplRef<'i, T>,
     {
         fn foo3(&self) -> i32 {
-            <T::By as framework::Proxy<T>>::Ref::from_impl(self).foo3()
+            <T::By as framework::BorrowImplRef<T>>::Ref::from_impl(self).foo3()
         }
     }
 }
