@@ -87,3 +87,19 @@ pub mod foo3 {
         }
     }
 }
+
+pub mod foo_dyn {
+    use super::*;
+    use core::foo_dyn::FooDynImpl;
+
+    pub struct MyImpl;
+
+    impl<T> FooDynImpl<T> for MyImpl
+    where
+        Impl<T>: SomeDep,
+    {
+        fn foo_dyn(&self, _impl: &Impl<T>) -> i32 {
+            _impl.bar()
+        }
+    }
+}

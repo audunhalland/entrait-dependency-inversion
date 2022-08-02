@@ -84,3 +84,27 @@ pub mod foo3 {
         }
     }
 }
+
+/// Dynamic dispatch
+pub mod foo_dyn {
+    use std::borrow::Borrow;
+
+    use super::*;
+
+    pub trait FooDyn {
+        fn foo_dyn(&self) -> i32;
+    }
+
+    pub trait FooDynImpl<T>: 'static {
+        fn foo_dyn(&self, _impl: &Impl<T>) -> i32;
+    }
+
+    impl<T: 'static> FooDyn for Impl<T>
+    where
+        T: core::borrow::Borrow<dyn FooDynImpl<T>>,
+    {
+        fn foo_dyn(&self) -> i32 {
+            <T as Borrow<dyn FooDynImpl<T>>>::borrow(&*self).foo_dyn(self)
+        }
+    }
+}
