@@ -13,17 +13,17 @@ pub mod foo1 {
         fn foo1(__self: &Impl<T>) -> i32;
     }
 
-    pub trait Foo1SelectImpl<T> {
-        type Impl: Foo1Impl<T>;
+    pub trait DelegateFoo1<T> {
+        type By: Foo1Impl<T>;
     }
 
     // Delegation
     impl<T> Foo1 for Impl<T>
     where
-        T: Foo1SelectImpl<T>,
+        T: DelegateFoo1<T>,
     {
         fn foo1(&self) -> i32 {
-            <T as Foo1SelectImpl<T>>::Impl::foo1(self)
+            <T as DelegateFoo1<T>>::By::foo1(self)
         }
     }
 }
@@ -35,16 +35,16 @@ pub mod foo2 {
         fn foo2(&self) -> i32;
     }
 
-    pub trait SelectFoo2<'i, T> {
-        type Ref: Foo2 + framework::ImplRef<'i, T>;
+    pub trait DelegateFoo2<'i, T> {
+        type ByRef: Foo2 + framework::ImplRef<'i, T>;
     }
 
     impl<T> Foo2 for Impl<T>
     where
-        T: for<'i> SelectFoo2<'i, T>,
+        T: for<'i> DelegateFoo2<'i, T>,
     {
         fn foo2(&self) -> i32 {
-            <T as SelectFoo2<T>>::Ref::from_impl(self).foo2()
+            <T as DelegateFoo2<T>>::ByRef::from_impl(self).foo2()
         }
     }
 }
@@ -56,13 +56,13 @@ pub mod foo3 {
         fn foo3(&self) -> i32;
     }
 
-    pub trait SelectFoo3<T> {
+    pub trait DelegateFoo3<T> {
         type By: framework::BorrowImpl<T>;
     }
 
     impl<T> Foo3 for Impl<T>
     where
-        T: SelectFoo3<T>,
+        T: DelegateFoo3<T>,
         for<'i> <T::By as framework::BorrowImplRef<'i, T>>::Ref: Foo3 + framework::ImplRef<'i, T>,
     {
         fn foo3(&self) -> i32 {

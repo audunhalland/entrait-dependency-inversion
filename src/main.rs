@@ -10,15 +10,15 @@ impl SomeDep for App {
     }
 }
 
-impl core::foo1::Foo1SelectImpl<Self> for App {
-    type Impl = middle::foo1::MyImpl;
+impl core::foo1::DelegateFoo1<Self> for App {
+    type By = middle::foo1::MyImpl;
 }
 
-impl<'i> core::foo2::SelectFoo2<'i, Self> for App {
-    type Ref = middle::foo2::Foo2Ref<'i, Self>;
+impl<'i> core::foo2::DelegateFoo2<'i, Self> for App {
+    type ByRef = middle::foo2::Foo2Ref<'i, Self>;
 }
 
-impl core::foo3::SelectFoo3<Self> for App {
+impl core::foo3::DelegateFoo3<Self> for App {
     type By = middle::foo3::MyImpl;
 }
 
