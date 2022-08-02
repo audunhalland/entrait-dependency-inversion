@@ -2,6 +2,11 @@ use framework::ImplRef;
 
 use implementation::Impl;
 
+/// Solution 1:
+///
+/// Starts with `Foo1`, generates two traits from that one:
+/// `Foo1Impl`: A very close copy of the trait that removes `&self` and adds `&Impl<T>`.
+/// `DelegateFoo1`: This is implemented by the application type.
 pub mod foo1 {
     use super::*;
 
@@ -28,6 +33,11 @@ pub mod foo1 {
     }
 }
 
+/// Solution 2:
+///
+/// This reuses the same trait, but relies on custom smart pointers implementing
+/// the trait.
+/// The smart-pointer implementation details are revealed through the delegation trait.
 pub mod foo2 {
     use super::*;
 
@@ -49,6 +59,10 @@ pub mod foo2 {
     }
 }
 
+/// Solution 3:
+///
+/// This reuses the same trait that relies on custom smart-pointer, but the smart-pointer
+/// implementation details are removed from the delegation trait, which is mandatory to implement by hand.
 pub mod foo3 {
     use super::*;
 
