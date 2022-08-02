@@ -16,7 +16,7 @@ where
 
 pub mod foo1 {
     use super::*;
-    use core::foo1::Foo1Impl;
+    use domain::foo1::Foo1Impl;
 
     pub struct MyImpl;
 
@@ -32,7 +32,7 @@ pub mod foo1 {
 
 pub mod foo2 {
     use super::*;
-    use core::foo2::Foo2;
+    use domain::foo2::Foo2;
 
     pub struct Foo2Ref<'i, T>(&'i Impl<T>);
 
@@ -57,7 +57,7 @@ pub mod foo2 {
 
 pub mod foo3 {
     use super::*;
-    use core::foo3::Foo3;
+    use domain::foo3::Foo3;
 
     pub struct MyImpl;
 
@@ -90,7 +90,7 @@ pub mod foo3 {
 
 pub mod foo_dyn {
     use super::*;
-    use core::foo_dyn::FooDynImpl;
+    use domain::foo_dyn::FooDynImpl;
 
     pub struct MyImpl;
 

@@ -3,7 +3,7 @@
 version = 3
 
 [[package]]
-name = "core"
+name = "domain"
 version = "0.1.0"
 dependencies = [
  "framework",
@@ -24,10 +24,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f9cd5b8cf68a1cda2eb0bdd7250e6ffa69edf485dda06dfb5e5a67a556e8db91"
 
 [[package]]
-name = "middle"
+name = "intermediate"
 version = "0.1.0"
 dependencies = [
- "core",
+ "domain",
  "framework",
  "implementation",
 ]
@@ -36,8 +36,8 @@ dependencies = [
 name = "rust-dependency-inversion"
 version = "0.1.0"
 dependencies = [
- "core",
+ "domain",
  "framework",
  "implementation",
- "middle",
+ "intermediate",
 ]

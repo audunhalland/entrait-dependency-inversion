@@ -1,5 +1,5 @@
 [package]
-name = "middle"
+name = "domain"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,5 +7,4 @@ edition = "2021"
 
 [dependencies]
 framework = { path = "../framework" }
-core = { path = "../core" }
 implementation = "0.1"
