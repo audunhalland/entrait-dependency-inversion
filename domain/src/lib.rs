@@ -1,3 +1,6 @@
+#![cfg_attr(feature = "nightly", feature(generic_associated_types))]
+#![cfg_attr(feature = "nightly", feature(type_alias_impl_trait))]
+
 use framework::ImplRef;
 
 use implementation::Impl;
@@ -105,6 +108,41 @@ pub mod foo_dyn {
     {
         fn foo_dyn(&self) -> i32 {
             <T as Borrow<dyn FooDynImpl<T>>>::borrow(&*self).foo_dyn(self)
+        }
+    }
+}
+
+#[cfg(feature = "nightly")]
+pub mod foo_static_async {
+    use super::*;
+    use std::future::Future;
+
+    pub trait FooStaticAsync {
+        type Fut<'s>: Future<Output = i32>
+        where
+            Self: 's;
+
+        // TODO: elide
+        fn foo_static_async<'s>(&'s self) -> Self::Fut<'s>;
+    }
+
+    pub trait DelegateFooStaticAsync<T> {
+        type By: framework::BorrowImpl<T>;
+    }
+
+    impl<T> FooStaticAsync for Impl<T>
+    where
+        T: DelegateFooStaticAsync<T> + 'static,
+        for<'i> <T::By as framework::BorrowImplRef<'i, T>>::Ref: FooStaticAsync,
+    {
+        type Fut<'s> = impl Future<Output = i32> + 's;
+
+        fn foo_static_async<'s>(&'s self) -> Self::Fut<'s> {
+            async move {
+                <T::By as framework::BorrowImplRef<T>>::Ref::from_impl(self)
+                    .foo_static_async()
+                    .await
+            }
         }
     }
 }

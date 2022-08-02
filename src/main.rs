@@ -1,3 +1,6 @@
+#![cfg_attr(feature = "nightly", feature(generic_associated_types))]
+#![cfg_attr(feature = "nightly", feature(type_alias_impl_trait))]
+
 use intermediate::SomeDep;
 
 use implementation::Impl;
@@ -30,7 +33,13 @@ impl std::borrow::Borrow<dyn domain::foo_dyn::FooDynImpl<Self>> for App {
     }
 }
 
-fn main() {
+#[cfg(feature = "nightly")]
+impl domain::foo_static_async::DelegateFooStaticAsync<Self> for App {
+    type By = intermediate::foo_static_async::MyImpl;
+}
+
+#[tokio::main]
+async fn main() {
     use domain::foo1::Foo1;
     use domain::foo2::Foo2;
     use domain::foo3::Foo3;
@@ -44,4 +53,10 @@ fn main() {
     println!("foo2: {}", app.foo2());
     println!("foo3: {}", app.foo3());
     println!("foo_dyn: {}", app.foo_dyn());
+
+    #[cfg(feature = "nightly")]
+    {
+        use domain::foo_static_async::FooStaticAsync;
+        println!("foo_static_async: {}", app.foo_static_async().await);
+    }
 }
