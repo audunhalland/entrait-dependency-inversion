@@ -13,9 +13,13 @@ This is currently only possible by exiting the `Impl<T>`-layer.
 
 This repository is a POC that uses safe type-magic to enable dependency inversion and keep the desired abstraction level at the same time.
 
-For enabling dispatch of dependency inversion, we always have to implement the trait twice for two different types.
+For enabling dispatch of inverted dependencies, we have to implement the trait twice, for two different types.
 The implementation for `Impl<T>` is the "inbound" one, and needs to delegate to another implementation.
-This means we need to temporarily use a different `Self` type, only while dispatching the call.
+For "normal" entraited functions, it just delegates by calling those functions, that's easy.
+For delegating to another trait implementation (of the same trait), we temporarily have to use
+  a different `Self`-type while delegating to the inner one.
+This type needs to be _unique_ for the selected implementation.
+It has to be a smart-pointer-like type that borrows the `Impl<T>`, so that inner type can be extracted again at the other side of the call, and injected further into the business logic.
 
 Implementing static dispatch of a dependency inversion requires the `T` to implement an associated type that points to the correct implementation.
 
