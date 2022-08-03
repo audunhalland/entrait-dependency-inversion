@@ -21,7 +21,7 @@ For delegating to another trait implementation (of the same trait), we temporari
 This type needs to be _unique_ for the selected implementation.
 It has to be a smart-pointer-like type that borrows the `Impl<T>`, so that inner type can be extracted again at the other side of the call, and injected further into the business logic.
 
-Implementing static dispatch of a dependency inversion requires the `T` to implement a "delegator trait" with an associated type that points to the correct implementation.
+Implementing static dispatch of an inverted dependency requires the `T` to implement a "delegator trait" with an associated type that points to the correct implementation.
 
 Implementing dynamic dispatch will only require implementing a method that returns `dyn Trait` (via `Borrow`).
 But we need to generate a _copy_ of the trait, with an extra `&Impl<T>`-receiver, to use as delegation target.
