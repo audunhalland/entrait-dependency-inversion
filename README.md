@@ -18,7 +18,7 @@ The implementation for `Impl<T>` is the "inbound" one, and needs to delegate to 
 For "normal" entraited functions, it just delegates by calling those functions, that's easy.
 For delegating to another trait implementation (of the same trait), we temporarily have to use
   a different `Self`-type while delegating to the inner one.
-This type needs to be _unique_ for the selected implementation.
+This type needs to be _unique_ for the selected implementation (because it will be the target of a blanket implementation of the trait).
 It has to be a smart-pointer-like type that borrows the `Impl<T>`, so that inner type can be extracted again at the other side of the call, and injected further into the business logic.
 
 Implementing static dispatch of an inverted dependency requires the `T` to implement a "delegator trait" with an associated type that points to the correct implementation.
