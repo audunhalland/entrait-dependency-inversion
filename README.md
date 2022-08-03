@@ -33,3 +33,21 @@ This ensures that coherence (a.k.a. Orphan) rules are not broken.
 The inner layer is inside `domain/`, and defines some traits which get delegated to an unknown receiver.
 The `intermediate/` layer is supposed to provide those delegated-to implementations.
 The main crate in `src/` defines the application and links things together.
+
+```
+┌───────────────────────┐
+│      main             │
+│ ┌───────────────────┐ │
+│ │    intermediate   │ │
+│ │ ┌───────────────┐ │ │
+│ │ │  domain       │ │ │
+│ │ │ ┌───────────┐ │ │ │
+│ │ │ │framework  │ │ │ │
+│ │ │ └───────────┘ │ │ │
+│ │ │               │ │ │
+│ │ └───────────────┘ │ │
+│ │                   │ │
+│ └───────────────────┘ │
+│                       │
+└───────────────────────┘
+```
